@@ -3,10 +3,23 @@
 Tamagocha tamagocha = new Tamagocha { Name = "Варфоломей" };
 tamagocha.HungryChanged += Tamagocha_HungryChanged;
 
+ConsoleKeyInfo command;
+do
+{
+    command = Console.ReadKey();
+    if (command.Key == ConsoleKey.F)
+        tamagocha.Feed();
+    else if (command.Key == ConsoleKey.I)
+        tamagocha.PrintInfo();
+}
+while (command.Key != ConsoleKey.Escape);
+tamagocha.Stop();
+
 void Tamagocha_HungryChanged(object? sender, EventArgs e)
 {
     Console.SetCursorPosition(0, 0);
     Console.Write($"{tamagocha.Name} голодает! Показатель голода растет: {tamagocha.Hungry}");
+    Console.SetCursorPosition(0, 5); // возвращаем курсор для ввода команды!
 }
 
 class Tamagocha
@@ -56,8 +69,7 @@ class Tamagocha
 
     private void FallSleep()
     {
-        Console.SetCursorPosition(0, 10);
-        Console.Write($"{Name} внезапно начинает спать как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
+        WriteMessageToConsole($"{Name} внезапно начинает спать как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
         Thirsty += random.Next(5, 10);
         Hungry += random.Next(5, 10);
         Dirty += random.Next(5, 10);
@@ -65,15 +77,34 @@ class Tamagocha
 
     private void JumpMinute()
     {
-        Console.SetCursorPosition(0, 10);
-        Console.Write($"{Name} внезапно начинает прыгать как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
+        WriteMessageToConsole($"{Name} внезапно начинает прыгать как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
         Thirsty += random.Next(5, 10);
         Hungry += random.Next(5, 10);
         Dirty += random.Next(5, 10);
     }
 
+    private void WriteMessageToConsole(string message)
+    {
+        Console.SetCursorPosition(0, 10);
+        Console.Write(message);
+        Console.SetCursorPosition(0, 5); // возвращаем курсор для ввода команды!
+    }
+
     public void PrintInfo()
     {
+        Console.SetCursorPosition(0, 8);
         Console.WriteLine($"{Name}: Health:{Health} Hungry:{Hungry} Dirty:{Dirty} Thirsty:{Thirsty} IsDead:{IsDead}");
+    }
+
+    public void Stop()
+    {
+        IsDead = true;
+    }
+
+    internal void Feed()
+    {
+        WriteMessageToConsole($"{Name} внезапно начинает ЖРАТЬ как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
+
+        Hungry -= random.Next(5, 10);
     }
 }
