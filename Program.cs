@@ -11,7 +11,12 @@ do
         tamagocha.Feed();
     else if (command.Key == ConsoleKey.I)
         tamagocha.PrintInfo();
+    else if (command.Key == ConsoleKey.S)
+        tamagocha.Clean();
+    else if (command.Key == ConsoleKey.W)
+        tamagocha.Drink();
 }
+
 while (command.Key != ConsoleKey.Escape);
 tamagocha.Stop();
 
@@ -52,16 +57,17 @@ class Tamagocha
     {
         while (!IsDead)
         {
-            Thread.Sleep(500);
-            int rnd = random.Next(0, 2);
+            Thread.Sleep(600);
+            int rnd = random.Next(0, 6);
             switch(rnd)
             {
                 case 0: JumpMinute(); break;
                 case 1: FallSleep(); break;
-                case 2: break;
-                case 3: break;
-                case 4: break;
-                case 5: break;
+                case 2: Sing(); break;
+                case 3: FightWin(); break;
+                case 4: FightLose(); break;
+                case 5: TryDead(); break;
+                case 6: Dance(); break;
                 default: break;
             }
         }
@@ -74,7 +80,38 @@ class Tamagocha
         Hungry += random.Next(5, 10);
         Dirty += random.Next(5, 10);
     }
-
+    private void Dance()
+    {
+        WriteMessageToConsole($"{Name} внезапно начинает крутиться на голове! Это продолжается целую минуту. Показатели голода, жажды и чистоты ВДВОЕ повышены!");
+        Thirsty += random.Next(5, 20);
+        Hungry += random.Next(5, 20);
+        Dirty += random.Next(5, 20);
+    }
+    private void TryDead()
+    {
+        WriteMessageToConsole($"{Name} притворяется мёртвым. Показатели голода, жажды и чистоты повышены!");
+        Thirsty += random.Next(5, 10);
+        Hungry += random.Next(5, 10);
+        Dirty += random.Next(5, 10);
+    }
+    private void FightLose()
+    {
+        WriteMessageToConsole($"{Name} Учавствует в драке... И проигрывает! Показатели голода, жажды и чистоты СИЛЬНО повышены!");
+        Thirsty += random.Next(5, 15);
+        Hungry += random.Next(5, 15);
+        Dirty += random.Next(5, 15);
+    }
+    private void Sing()
+    {
+        WriteMessageToConsole($"{Name} начинает читать Рэп! Показатели не изменились.");
+    }
+    private void FightWin()
+    {
+        WriteMessageToConsole($"{Name} Учавствует в драке... И побеждает! Показатели голода, жажды и чистоты понижены!");
+        Thirsty -= random.Next(5, 10);
+        Hungry -= random.Next(5, 10);
+        Dirty -= random.Next(5, 10);
+    }
     private void JumpMinute()
     {
         WriteMessageToConsole($"{Name} внезапно начинает прыгать как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
@@ -106,5 +143,13 @@ class Tamagocha
         WriteMessageToConsole($"{Name} внезапно начинает ЖРАТЬ как угорелый. Это продолжается целую минуту. Показатели голода, жажды и чистоты повышены!");
 
         Hungry -= random.Next(5, 10);
+    }
+    internal void Clean()
+    {
+        Dirty -= random.Next(5, 10);
+    }
+    internal void Drink()
+    {
+        Thirsty -= random.Next(5, 10);
     }
 }
