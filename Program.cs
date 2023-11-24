@@ -58,6 +58,7 @@ class Tamagocha
         while (!IsDead)
         {
             Thread.Sleep(600);
+            Console.Clear();
             int rnd = random.Next(0, 6);
             switch(rnd)
             {
@@ -104,6 +105,9 @@ class Tamagocha
     private void Sing()
     {
         WriteMessageToConsole($"{Name} начинает читать Рэп! Показатели не изменились.");
+        Thirsty -= random.Next(0, 0);
+        Hungry -= random.Next(0, 0);
+        Dirty -= random.Next(0, 0);
     }
     private void FightWin()
     {
