@@ -15,6 +15,8 @@ do
         tamagocha.Clean();
     else if (command.Key == ConsoleKey.W)
         tamagocha.Drink();
+    else if (command.Key == ConsoleKey.G)
+        tamagocha.GetGift();
 }
 
 while (command.Key != ConsoleKey.Escape);
@@ -28,13 +30,14 @@ void Tamagocha_HungryChanged(object? sender, EventArgs e)
 }
 
 class Tamagocha
-{ 
+{
     public string Name { get; set; }
     public int Health { get; set; } = 100;
     public int Hungry
     {
         get => hungry;
-        set { 
+        set
+        {
             hungry = value;
             HungryChanged?.Invoke(this, EventArgs.Empty);
         }
@@ -59,8 +62,8 @@ class Tamagocha
         {
             Thread.Sleep(600);
             Console.Clear();
-            int rnd = random.Next(0, 6);
-            switch(rnd)
+            int rnd = random.Next(0, 8);
+            switch (rnd)
             {
                 case 0: JumpMinute(); break;
                 case 1: FallSleep(); break;
@@ -69,6 +72,8 @@ class Tamagocha
                 case 4: FightLose(); break;
                 case 5: TryDead(); break;
                 case 6: Dance(); break;
+                case 7: Hide(); break;
+                case 8: FindEat(); break;
                 default: break;
             }
         }
@@ -81,12 +86,26 @@ class Tamagocha
         Hungry += random.Next(5, 10);
         Dirty += random.Next(5, 10);
     }
+    private void FindEat()
+    {
+        WriteMessageToConsole($"{Name} находит еду. Показатели голода понижены!");
+        Thirsty += random.Next(5, 10);
+        Hungry -= random.Next(5, 10);
+        Dirty += random.Next(5, 10);
+    }
     private void Dance()
     {
         WriteMessageToConsole($"{Name} внезапно начинает крутиться на голове! Это продолжается целую минуту. Показатели голода, жажды и чистоты ВДВОЕ повышены!");
         Thirsty += random.Next(5, 20);
         Hungry += random.Next(5, 20);
         Dirty += random.Next(5, 20);
+    }
+    private void Hide()
+    {
+        WriteMessageToConsole($"{Name} прячется целый час. Показатели голода, жажды и чистоты повышены!");
+        Thirsty += random.Next(5, 10);
+        Hungry += random.Next(5, 10);
+        Dirty += random.Next(5, 10);
     }
     private void TryDead()
     {
@@ -155,5 +174,34 @@ class Tamagocha
     internal void Drink()
     {
         Thirsty -= random.Next(5, 10);
+    }
+    internal void GetGift()
+    {
+        WriteMessageToConsole($"{Name} получает подарок!");
+    }
+
+    public interface IPresent
+    {
+        void Open();
+        void Gnaw();
+        void Smash();
+    }
+
+    public class Gift : IPresent
+    {
+        public void Gnaw()
+        {
+            
+        }
+
+        public void Open()
+        {
+
+        }
+
+        public void Smash()
+        {
+
+        }
     }
 }
